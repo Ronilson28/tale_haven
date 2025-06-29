@@ -1,0 +1,21 @@
+<main class="main-content">
+  <section class="login-section">
+    <h2>Entrar na Conta</h2>
+
+    <form id="loginForm" action="/login" method="POST">
+      <input type="email" name="email" placeholder="Endereço de e-mail" required>
+      <input type="password" name="senha" placeholder="Senha" required>
+
+      <div class="mostrar-senha">
+        <input type="checkbox" id="mostrarSenha" onclick="toggleSenha()"> 
+        <label for="mostrarSenha">Mostrar senha</label>
+      </div>
+
+      <button type="submit" class="btn-login">Entrar</button>
+    </form>
+
+    <p class="possuir-conta">Não tem conta? <a href="/sign_up">Cadastre-se aqui</a>.</p>
+  </section>
+</main>
+
+<script src="/javascripts/login_form.js"></script>

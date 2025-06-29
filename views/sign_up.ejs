@@ -1,0 +1,64 @@
+<main class="main-content">
+  <section class="cadastro-section">
+    <h2>Crie sua Conta</h2>
+  
+    <% if (mensagemErro) { %>
+      <p class="erro"><%= mensagemErro %></p>
+    <% } %>
+    
+    <p class="campo-obrigatorio">* Obrigatório</p>
+    <form id="cadastroForm" action="/sign_up" method="POST">
+      <label class="label-cadastro" for="nome">Nome completo<span class="campo-obrigatorio">*</span></label>
+      <input type="text" name="nome" placeholder="ex.: Fulano da Silva" required>
+      <label class="label-cadastro" for="usuario">Usuário<span class="campo-obrigatorio">*</span></label>
+      <input type="text" name="usuario" placeholder="ex.: autor_lendario" required>
+      <label class="label-cadastro" for="email">E-mail<span class="campo-obrigatorio">*</span></label>
+      <input type="email" name="email" placeholder="ex.: autorlendario@gmail.com" required>
+      <label class="label-cadastro" for="confirmEmail">Confirmar E-mail<span class="campo-obrigatorio">*</span></label>
+      <input type="email" name="confirmEmail" placeholder="ex.: autorlendario@gmail.com" required>
+      <label class="label-cadastro" for="dataNascimento">Data de Nascimento<span class="campo-obrigatorio">*</span></label>
+      <input type="date" name="dataNascimento" required>
+
+      <label class="label-cadastro" for="generos">Gêneros Preferidos</label>
+      <!--p class="descricao-generos">Selecione os gêneros que mais gosta. Você pode escolher mais de um.</p-->     
+      <div class="generos-container">
+        <div id="generos-select" class="generos-select" tabindex="0">
+          Selecione os gêneros... <span class="icon-select">▼</span>
+        </div>
+        <div id="generos-options" class="generos-options hidden">
+          <div class="option" ><input type="checkbox" name="preferenciasGenero" value="Ação" id="gen-acao"><label for="gen-acao">Ação</label></div>
+          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Fantasia" id="gen-fantasia"><label for="gen-fantasia">Fantasia</label></div>
+          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Ficção Científica" id="gen-ficcao"><label for="gen-ficcao">Ficção Científica</label></div>
+          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Mistério" id="gen-misterio"><label for="gen-misterio">Mistério</label></div>
+          <div class="option" ><input type="checkbox" name="preferenciasGenero" value="Romance" id="gen-romance"><label for="gen-romance">Romance</label></div>
+          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Suspense" id="gen-suspense"><label for="gen-suspense">Suspense</label></div>
+          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Terror" id="gen-terror"><label for="gen-terror">Terror</label></div>
+        </div> 
+        <div class="add-novos-generos">
+          <label class="label-cadastro" for="novo-genero">Outro Gênero?</label>
+          <input type="text" id="novo-genero" placeholder="Adicione um novo gênero" />
+          <button type="button" id="btn-add-novo">Adicionar</button>
+        </div>
+      </div>
+      
+      <!--label class="label-cadastro" for="biografia">Bio</label>
+      <textarea name="biografia" placeholder="Escreva sua biografia"></textarea-->
+
+      <label class="label-cadastro" for="senha">Senha<span class="campo-obrigatorio">*</span></label>
+      <div class="senha-container">
+        <input type="password" name="senha" placeholder="mín.: 8 caracteres" required>
+        <span class="icon-show-password" onclick="toggleSenha('senha', this)"><img src="/icons/eye-icon-closed.png" alt="Mostrar Senha"></span>
+      </div>
+
+      <label class="label-cadastro" for="confirmSenha">Confirmar Senha<span class="campo-obrigatorio">*</span></label>
+      <div class="senha-container">
+        <input type="password" name="confirmSenha" placeholder="mín.: 8 caracteres" required>
+        <span class="icon-show-password" onclick="toggleSenha('confirmSenha', this)"><img src="/icons/eye-icon-closed.png" alt="Mostrar Senha"></span>
+      </div>
+
+      <button type="submit" class="btn-cadastrar">Cadastrar</button>
+    </form>
+    <p class="possuir-conta">Já possui conta? <a href="/login">Entrar</a></p>
+  </section>
+</main>
+<script src="/javascripts/sign_up_form.js"></script>

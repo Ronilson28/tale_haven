@@ -1,0 +1,15 @@
+<main class="erro-container">
+    <div id="erro-contain">
+        <% if (message) { %>
+            <h1 class="erro-message"><%= message %></h1>
+        <% } else { %>
+            <h1 class="erro-message">An error occurred</h1>
+        <% } %>
+        <% if (error.status) { %>
+            <h2 class="erro-status"><%= error.status %></h2>
+        <% } %>
+        <% if (error.stack) { %>
+            <pre class="erro-stack"><%= error.stack %></pre>
+        <% } %>
+    </div>
+</main>

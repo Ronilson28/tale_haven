@@ -1,0 +1,40 @@
+<main class="pagina-inicial">
+  <section class="destaque">
+    <h1>Destaque</h1>
+
+    <% if (destaque) { %>
+      <div class="destaque-banner" data-id="<%= destaque._id %>">
+        <img src="<%= destaque.capa_url %>" alt="<%= destaque.titulo %>">
+        <div class="info-destaque">
+          <h2><%= destaque.titulo %></h2>
+          <p id="destaque-autor">Escrito por: <i><%= destaque.id_autor.nome %></i></p>
+          <p id="destaque-usuario">@<%= destaque.id_autor.usuario %></p>
+          <p id="destaque-resumo"><%= destaque.resumo %></p>
+          <p id="destaque-genero"><%= destaque.genero.join('; ') %></p>
+        </div>
+      </div>
+    <% } %>
+  </section>
+
+  <% categorias.forEach(function(categoria) { %>
+    <section class="categoria">
+      <h2><%= categoria.nome %></h2>
+      <div class="carrossel">
+        <% categoria.historias.forEach(function(historia) { %>
+          <div class="card-historia" data-id="<%= historia._id %>">
+            <div class="card-img">
+              <img src="<%= historia.capa_url %>" alt="<%= historia.titulo %>">
+            </div>
+            <div class="info-card">
+              <h3 id="info-card-titulo"><%= historia.titulo %></h3>
+              <p id="info-card-usuario">@<%= historia.id_autor.usuario %></p>
+              <p id="info-card-status"><%= historia.status %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  <% }) %>
+</main>
+
+<script src="/javascripts/feed.js"></script>

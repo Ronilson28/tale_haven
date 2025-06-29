@@ -1,0 +1,112 @@
+  <main class="perfil-content">
+    
+    <!-- Cabeçalho do autor -->
+    <section class="cabecalho-autor">
+        <div class="foto-perfil">
+            <img src="<%= autor.fotoPerfil %>" alt="Foto do Autor" />
+        </div>
+        <div class="info-perfil">
+            <div class="nome-seguir">
+                <h2 id="nome-autor"><%= autor.nome %></h2>
+                <% if (autorLogado) { %>
+                    <form id="form-seguir" action="/<%= autor._id %>/seguir" method="POST">
+                        <button type="submit" class="btn-seguir" data-seguindo="<%= autorSeguidores.includes(autorLogado._id.toString()) %>">
+                            <%= autorSeguidores.includes(autorLogado._id.toString()) ? 'Seguindo' : 'Seguir' %>
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+            <p id="usuario">@<%= autor.usuario %></p>
+        
+            <div class="biografia-container">
+                <% if (autor.biografia) { %>
+                    <p class="bio" id="biografia">" <%= autor.biografia %> "</p>
+                <% } else { %>
+                    <p class="nao-bio" id="biografia">" O autor ainda não possui uma biografia. "</p>
+                <% } %>
+            </div>
+        
+            <div class="minhas-redes-sociais">
+                <% if (autor.redesSociais && Object.keys(autor.redesSociais).length > 0) { %>
+                    <p><strong>Redes Sociais:</strong></p>
+                    <ul>
+                        <% Object.keys(autor.redesSociais).forEach(function(rede) { %>
+                            <li>
+                                <strong><%= rede.charAt(0).toUpperCase() + rede.slice(1) %>:</strong>
+                                <% if (autor.redesSociais[rede]) { %>
+                                    <a href="<%= autor.redesSociais[rede] %>" target="_blank">
+                                        <%= autor.redesSociais[rede] %>
+                                    </a>
+                                <% } else { %>
+                                    Não disponível
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+            </div>
+            <p id="data-criacao"><strong>Entrou em: </strong> <%= autor.dataCriacao.toLocaleDateString() %></p>
+            <div class="contagem-seguidores">
+                <p><strong><%= autor.historias.length %></strong> histórias publicadas</p>
+                <p id="listar-seguidores"><strong><a href="#" onclick="abrirModalLista('seguidores')"><%= autor.seguidores.length %></strong> seguidores</a></p>
+                <p id="listar-seguidores"><strong><a href="#" onclick="abrirModalLista('seguindo')"><%= autor.seguindo.length %></strong> seguindo</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="historias-publicadas">
+        <h2>Histórias Publicadas</h2>
+        <ul class="lista-historias">
+            <% if (autor.historias.length > 0) { %>
+                <% autor.historias.forEach(function(historia) { %>
+                    <li class="historia-item">
+                        <div class="historia-container">
+                            <img src="<%= historia.capa_url %>" alt="Capa da História" class="imagem-capa" />
+                            <div class="historia-info">
+                                <h3><%= historia.titulo %></h3>
+                                <p id="genero-publico"><i><%= historia.genero.join('; ') %></i></p>
+                                <p id="resumo-publico"><%= historia.resumo %></p>
+                                <p><%= historia.status %></p>
+                            </div>
+                            <div class="acoes-historia">
+                                <button class="btn-ler-historia" data-id="<%= historia._id %>" data-nome="<%= autor.nome %>" data-usuario="<%= autor.usuario %>">Ler</button>
+                            </div>
+                        </div>
+                    </li>
+                <% }); %>
+            <% } else { %>
+                <li class="sem-historias"><em>@<%= autor.usuario %> ainda não publicou nenhuma história.</em></li>
+            <% } %>
+        </ul>
+    </section>
+</main>
+
+
+<div id="modal-seguidores" class="seguidores-modal hidden">
+    <div class="modal-conteudo">
+        <span class="fechar-modal-seguidores" onclick="fecharModal()">&times;</span>
+        <h2 id="modal-seguidores-titulo">Lista</h2>
+        <ul id="lista-seguidores" class="lista-autores hidden">
+            <% autor.seguidores.forEach(a => { %>
+                <li>
+                    <a href="/<%= a.usuario %>">
+                        <img src="<%= a.fotoPerfil %>">
+                        <strong><%= a.nome %></strong><span>@<%= a.usuario %></span>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+        <ul id="lista-seguindo" class="lista-autores hidden">
+            <% autor.seguindo.forEach(a => { %>
+                <li>
+                    <a href="/<%= a.usuario %>">
+                        <img src="<%= a.fotoPerfil %>">
+                        <strong><%= a.nome %></strong><span>@<%= a.usuario %></span>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+</div>
+
+<script src="/javascripts/public_profile.js"></script>

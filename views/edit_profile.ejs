@@ -1,0 +1,42 @@
+<main class="main-content">
+    <section class="editar-perfil-section">
+        <h2>Editar Perfil</h2>
+        <form action="/profile/editar" method="POST" enctype="multipart/form-data">
+            <!-- editar foto de perfil-->
+            <div class="editar-foto-perfil">
+                <div class="foto-contain"  onclick="ampliarImagem(this)">
+                    <img src="<%= autor.fotoPerfil %>" alt="Foto do Autor" title="Foto do Autor" >
+                </div>
+                <label for="fotoPerfil">Selecionar foto</label>
+                <input type="file" name="fotoPerfil" id="fotoPerfil" accept="image/*">
+            </div>
+
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" value="<%= autor.nome %>" required>
+
+            <label for="usuario">Nome de Usuário:</label>
+            <input type="text" name="usuario" id="usuario" value="<%= autor.usuario %>" required>
+
+            <label for="biografia">Biografia:</label>
+            <textarea name="biografia" id="biografia"><%= autor.biografia %></textarea>
+
+            <h3>Redes Sociais</h3>
+            <label for="twitter">Twitter:</label>
+            <input type="text" name="twitter" value="<%= autor.redesSociais.twitter %>" placeholder="https://x.com/nome-de-usuario">
+
+            <label for="instagram">Instagram:</label>
+            <input type="text" name="instagram" value="<%= autor.redesSociais.instagram %>" placeholder="https://instagram.com/nome-de-usuario">
+
+            <label for="facebook">Facebook:</label>
+            <input type="text" name="facebook" value="<%= autor.redesSociais.facebook %>" placeholder="https://facebook.com/nome-de-usuario">
+
+            <label for="sitePessoal">Site Pessoal:</label>
+            <input type="text" name="sitePessoal" value="<%= autor.redesSociais.sitePessoal %>" placeholder="https://meu-site-pessoal.com/">
+
+            <button class="btn-editar" type="submit">Salvar Alterações</button>
+            <a href="/profile" class="btn-cancelar">Cancelar</a>
+        </form>
+    </section>
+</main>
+
+<script src="/javascripts/editar_perfil.js"></script>

@@ -1,0 +1,68 @@
+<main class="main-nova-historia">
+    <section class="nova-historia-section">
+        <h1>Editar História</h1>
+
+        <form id="novaHistoriaForm" action="/historias/editar/<%= historia._id %>" method="POST" enctype="multipart/form-data">
+            <div class="editar-capa">
+                <div class="capa-contain">
+                    <img id="preview-capa" src="/images/modelos-capas/Modelo_capa_url-01.jpg" alt="Capa da História" title="Capa da História" >
+                </div>
+                <label id="labelSelecionarCapa" for="capa_url">Escolher capa</label>
+                <input type="file" name="capa_url" id="capa_url" accept="image/*">
+                <!-- Modelos prontos -->
+                <label id="labelCapaPronta">Ou escolha uma capa pronta:</label>
+                <div class="modelos-capas">
+                    <% const modelos = ['Modelo_capa_url-01.jpg', 'Modelo_capa_url-02.png', 'Modelo_capa_url-03.png', 'Modelo_capa_url-04.png', 'Modelo_capa_url-05.png']; %>
+                    <% modelos.forEach((modelo, i) => { %>
+                        <img 
+                            src="/images/modelos-capas/<%= modelo %>" 
+                            alt="Modelo <%= i + 1 %>" 
+                            class="modelo-capa"
+                            onclick="selecionarModeloCapa('/images/modelos-capas/<%= modelo %>')"
+                        >
+                    <% }) %>
+                </div>
+                <!-- Input hidden para saber qual modelo foi escolhido -->
+                <input type="hidden" name="capa_selecionada" id="capa_selecionada">
+            </div>
+            <label for="titulo">Título:</label>
+            <input type="text" name="titulo" placeholder="Título da História" value="<%= historia.titulo %>" required>
+            <label for="genero">Genêro (se mais de um, separar por vírgula):</label>
+            <input type="text" name="genero" placeholder="Ex.: Ação, Aventura, Fantasia" value="<%= historia.genero %>" required>
+            <label for="resumo">Resumo:</label>
+            <textarea name="resumo" placeholder="Resumo da História" required><%= historia.resumo %></textarea>
+            <label for="capitulos">Capítulos:</label>
+            <div id="capitulos-container">
+                <% historia.capitulos.forEach((cap, index) => { %>
+                    <div class="capitulo" data-index="<%= index %>">
+                        <!-- Campo oculto com o ID do capítulo -->
+                        <input type="hidden" name="capitulos[<%= index %>][id]" value="<%= cap._id %>">
+      
+                        <input
+                            type="text"  
+                            name="capitulos[<%= index %>][titulo]" 
+                            value="<%= cap.titulo %>" 
+                            placeholder="Título do Capítulo <%= index + 1 %>" 
+                            required
+                        >
+                        <textarea 
+                            name="capitulos[<%= index %>][conteudo]" 
+                            placeholder="Conteúdo do Capítulo <%= index + 1 %>" 
+                            required><%= cap.conteudo %>
+                        </textarea>
+                        <% if (index !== 0) { %>
+                            <button type="button" class="btn-remover-capitulo" onclick="removerCapitulo(this)">Remover</button>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+            <button type="button" class="btn-adicionar-capitulo" onclick="adicionarCapitulo()">Adicionar Capítulo</button>
+            <div class="acoes-nova-historia">
+                <button type="submit" class="btn-nova-historia">Salvar alterações</button>
+                <button type="button" class="btn-cancelar-nova-historia">Cancelar</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script src="/javascripts/editar_historia.js"></script>

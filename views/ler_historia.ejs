@@ -1,0 +1,36 @@
+<main class="main-leitura">
+  <section class="leitura-section">
+    <div class="leitura-capa">
+      <img src="<%= historia.capa_url %>" alt="Capa da História">
+    </div>
+    
+    <h1 class="leitura-titulo"><%= historia.titulo %></h1>
+    <p class="leitura-autor">Por <%= historia.id_autor.nome || 'Autor Desconhecido' %></p>
+    <p class="leitura-data">Publicado em <%= new Date(historia.data_criacao).toLocaleDateString() %></p>
+
+    <hr>
+
+    <div class="leitura-resumo">
+      <h2>Resumo</h2>
+      <p><%= historia.resumo %></p>
+    </div>
+
+    <div class="leitura-conteudo">
+      <div class="leitura-capitulos">
+        <% historia.capitulos.forEach((cap, index) => { %>
+          <div class="capitulo">
+            <h2><%= cap.titulo || ('Capítulo ' + (index + 1)) %></h2>
+            <p><%- cap.conteudo.replace(/\n/g, '<br>') %></p>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <a href="/<%= origem === 'profile' ? 'profile' : origem === 'public_profile' ? usuario : '' %>" class="btn-voltar">
+      Voltar ao <%= origem === 'profile' ? 'Perfil' : origem === 'public_profile' ? 'Perfil' : 'Início' %>
+    </a>
+    
+  </section>
+</main>
+
+<script src="/javascripts/ler_historia.js"></script>
