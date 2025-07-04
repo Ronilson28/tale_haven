@@ -1,13 +1,24 @@
 const express = require('express');
 var router = express.Router();
 const Autor = require('../models/Autor');
+const Genero = require('../models/Genero');
 
 // Rota GET para exibir o formulário de cadastro
-router.get('/', (req, res) => {
-  res.render('sign_up', {
-    title: 'Cadastre-se - Portal de Histórias',
-    mensagemErro: null
-  });
+router.get('/', async (req, res) => {
+  try {
+    const generos = await Genero.find({ ativo: true }).sort('nome');
+    res.render('sign_up', {
+      title: 'Cadastre-se',
+      mensagemErro: null,
+      generos
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('cadastro', {
+      title: 'Cadastre-se',
+      mensagemErro: 'Erro ao carregar os gêneros.'
+    });
+  }
 });
 
 // Rota POST para processar o cadastro de autor
@@ -70,9 +81,11 @@ router.post('/', async (req, res) => {
   // Verifica se preferenciasGenero foi fornecido e é um array ou string
   if (preferenciasGenero) {
     if (Array.isArray(preferenciasGenero)) {
-      preferencias = preferenciasGenero.map(str => str.trim());//.filter(str => str !== '');
+      preferencias = preferenciasGenero.map(str => str.trim()).filter(str => str !== '');
     } else {
-      preferencias = [preferenciasGenero.trim()]; // caso tenha só um
+      // caso tenha só um
+      const valor = preferenciasGenero.trim();
+      if (valor) preferencias = [valor];
     }
   }
   

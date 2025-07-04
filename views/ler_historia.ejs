@@ -5,7 +5,7 @@
     </div>
     
     <h1 class="leitura-titulo"><%= historia.titulo %></h1>
-    <p class="leitura-autor">Por <%= historia.id_autor.nome || 'Autor Desconhecido' %></p>
+    <p class="leitura-autor">Por <a class="leitura-autor" href="/<%= historia.id_autor.usuario %>"><%= historia.id_autor.nome || 'Autor Desconhecido' %></a></p>
     <p class="leitura-data">Publicado em <%= new Date(historia.data_criacao).toLocaleDateString() %></p>
 
     <hr>

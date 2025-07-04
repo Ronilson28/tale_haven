@@ -1,0 +1,28 @@
+<main class="main-categoria">
+  <section class="categoria-section">
+    <h1><%= genero %></h1>
+
+    <% if (historias.length === 0) { %>
+      <p>Nenhuma história encontrada para este gênero.</p>
+    <% } else { %>
+      <div class="lista-historias">
+        <% historias.forEach(historia => { %>
+          <div class="card-historias-gen">
+            <div class="card-img">
+              <img src="<%= historia.capa_url %>" alt="Capa da história">
+            </div>
+            <div class="info-card-gen">
+              <h2 class="info-card-titulo"><a href="/historias/<%= historia._id %>/ler"><%= historia.titulo %></a></h2>
+              <p class="info-card-autor">Por <a href="/<%= historia.id_autor.usuario %>"><%= historia.id_autor.nome %></a></p>
+              <p class="info-card-usuario"><a href="/<%= historia.id_autor.usuario %>">@<%= historia.id_autor.usuario %></a></p>
+              <p class="info-card-resumo"><%= historia.resumo.slice(0, 100) %><% if (historia.resumo.length > 100) { %>...<% } %></p>
+              <p class="info-card-status"><%= historia.status %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <a href="/categorias" class="btn-voltar">← Voltar para Categorias</a>
+  </section>
+</main>

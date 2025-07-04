@@ -1,0 +1,21 @@
+<main class="main-categorias">
+  <section class="categorias-section">
+    <h1>Categorias de Histórias</h1>
+
+    <div class="lista-categorias">
+      <% if (generos.length > 0) { %>
+        <% generos.forEach(genero => { %>
+          <a href="/categorias/<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>" class="categoria-card">
+            <div class="categoria-conteudo">
+              <h2><%= genero.nome %></h2>
+            </div>
+          </a>
+        <% }) %>
+      <% } else { %>
+        <p>Nenhum gênero cadastrado ainda.</p>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<script src="/javascripts/categorias.js"></script>

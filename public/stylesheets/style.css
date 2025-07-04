@@ -214,7 +214,7 @@ textarea {
 
 /* -------------------------------------------------------------------------------------------------------- */
 /* Pagina Inicial */
-.pagina-inicial {
+.pagina-inicial, .main-categoria, .main-categorias {
   padding: 20px;
   margin-top: 20px;
   height: 100%;
@@ -292,8 +292,8 @@ textarea {
 }
 
 .card-historia {
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 250px;
+  max-width: 250px;
   flex-shrink: 0;
   overflow: hidden;
   flex-direction: column;
@@ -317,10 +317,18 @@ textarea {
   border-radius: 15px 15px 0 0;
 }
 
-.info-card {
+.info-card, .info-card-gen {
   background-color: #ffffff20;
   border-radius: 0 0 15px 15px;
   padding: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.info-card {
+  min-height: 120px;
 }
 
 .info-card h3 {
@@ -934,6 +942,61 @@ textarea {
   margin-top: 20px;
 }
 
+.generos-container, .select-generos {
+  position: relative;
+}
+
+.generos-select {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 6px;
+}
+
+.icon-select {
+  margin-right: 2px;
+}
+
+.icon-select:hover {
+  color: #7B68EE;
+}
+
+.generos-options {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 6px;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-top: 1px;
+  z-index: 10;
+  border: 1px solid #000000bf;
+}
+
+.generos-options.hidden {
+  display: none;
+}
+
+.option {
+  margin-top: 8px;
+  margin-left: 8px;
+  align-items: center;
+}
+
+.generos-options input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.generos-options label {
+  margin-left: 5px;
+  color: #000000bf;
+  cursor: pointer;
+}
+
 #capitulos-container {
   display: flex;
   flex-direction: column;
@@ -1064,6 +1127,11 @@ textarea {
 .leitura-autor, .leitura-data {
   font-style: italic;
   color: #666666;
+  text-decoration: none;
+}
+
+.leitura-autor a:hover {
+  color: #313131;
 }
 
 .leitura-resumo, .leitura-conteudo {
@@ -1090,6 +1158,85 @@ textarea {
 
 .btn-voltar:hover {
   background-color: #007bff;
+}
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Categorias */
+.main-categoria, .main-categorias {
+  padding: 20px;
+  min-height: 550px;
+}
+
+.categorias-section h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.lista-categorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.categoria-card {
+  display: block;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.categoria-card:hover {
+  transform: translateY(-4px);
+}
+
+.categoria-conteudo h2 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+}
+
+.categoria-conteudo p {
+  font-size: 0.95rem;
+  color: #666;
+}
+/* -------------------------------------------------------------------------------------------------------- */
+/* Categorias -> Gênero */
+.categoria-section h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.lista-historias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card-historias-gen {
+  color: #ffffff;
+  border-radius: 10px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.info-card-gen h2 {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.info-card-gen h2 a, .info-card-autor a, .info-card-usuario a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.info-card-resumo {
+  padding: 1px;
+  text-align: justify;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 /* -------------------------------------------------------------------------------------------------------- */
@@ -1137,94 +1284,6 @@ textarea {
   margin-top: 10px;
 }
 
-.generos-container {
-  width: 460px;
-  position: relative;
-}
-
-.generos-select {
-  display: flex;
-  justify-content: space-between;
-  background-color: #ffffff;
-  color: #000000;
-  padding: 10px;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 6px;
-}
-
-.icon-select {
-  margin-right: 2px;
-}
-
-.icon-select:hover {
-  color: #7B68EE;
-}
-
-.generos-options {
-  position: absolute;
-  background: #ffffff;
-  border-radius: 6px;
-  width: 100%;
-  max-height: 150px;
-  overflow-y: auto;
-  margin-top: 1px;
-  z-index: 10;
-  border: 1px solid #000000bf;
-}
-
-.generos-options.hidden {
-  display: none;
-}
-
-.option {
-  margin-top: 8px;
-  margin-left: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.generos-options input[type="checkbox"] {
-  cursor: pointer;
-}
-
-.generos-options label {
-  margin-left: 5px;
-  color: #000000bf;
-  cursor: pointer;
-}
-
-.add-novos-generos {
-  /*display: flex;
-  justify-content: space-between;
-  align-items: center;*/
-  margin-top: 10px;
-}
-
-#novo-genero {
-  margin-top: 5px;
-  padding: 7px;
-  width: 80%;
-  box-sizing: border-box;
-}
-
-#btn-add-novo {
-  background-color: #ffffff;
-  color: #000000;
-  width: 19%;
-  padding: 8px;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-#btn-add-novo:hover {
-  background-color: #7c68ee;
-  color: #ffffff;
-  font-weight: 600;
-}
-
 /* -------------------------------------------------------------------------------------------------------- */
 /* Erro */
 #erro-contain {
@@ -1270,9 +1329,6 @@ textarea {
 /* Responsividade */
 /* tela de 1200px ou menos */
 @media (max-width: 1200px) {
-  .cabecalho-autor {
-    background-color: #6b1515bf;
-  }
 
   /*.cabecalho-autor {
     flex-wrap: wrap;
@@ -1311,15 +1367,12 @@ textarea {
 
 /* tela de 1100px ou menos */
 @media (max-width: 1100px) {
-  .cabecalho-autor {
-    background-color: #4a866abf;
-  }
+  /**/ 
 }
 
 /* tela de 1000px ou menos */
 @media (max-width: 1000px) {
   .cabecalho-autor {
-    background-color: #ffffff20;
     flex-direction: column;
     margin: 0 75px;
   }
@@ -1333,16 +1386,12 @@ textarea {
 
 /* tela de 900px ou menos */
 @media (max-width: 900px) {
-  .cabecalho-autor {
-    background-color: #9a069545;
-  }
-
+  /**/
 }
 
 /* tela de 800px ou menos */
 @media (max-width: 800px) {
   .cabecalho-autor {
-    background-color: #e1d70d20;
     gap: 10x;
   }
 }
@@ -1350,7 +1399,6 @@ textarea {
 /* tela de 768px ou menos */
 @media (max-width: 768px) {
   .cabecalho-autor {
-    background-color: #000000bf;
     flex-direction: column;
     margin: 0px;
   }

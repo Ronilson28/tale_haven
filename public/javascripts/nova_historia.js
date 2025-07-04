@@ -102,3 +102,27 @@ document.querySelector('.btn-cancelar-nova-historia').addEventListener('click', 
         window.location.href = '/profile'; // Redireciona para o perfil do usuário
     }
 });
+
+const dropdownSelect = document.getElementById('generos-select');
+const dropdownOptions = document.getElementById('generos-options');
+
+// Abre e fecha o dropdown
+dropdownSelect.addEventListener('click', () => {
+  dropdownOptions.classList.toggle('hidden');
+});
+
+// Fecha o dropdown ao clicar fora
+document.addEventListener('click', (e) => {
+  if (!dropdownSelect.contains(e.target) && !dropdownOptions.contains(e.target)) {
+    dropdownOptions.classList.add('hidden');
+  }
+});
+
+// Atualiza o texto do dropdown com os gêneros selecionados
+function atualizarTextoSelecionado() {
+  const selecionados = [...dropdownOptions.querySelectorAll('input[type=checkbox]:checked')].map(cb => cb.value);
+  dropdownSelect.textContent = selecionados.length > 0 ? selecionados.join('; ') : 'Selecione os gêneros...';
+}
+
+// Atualiza texto ao clicar nos checkboxes
+dropdownOptions.addEventListener('change', atualizarTextoSelecionado);

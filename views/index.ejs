@@ -9,7 +9,7 @@
           <h2><%= destaque.titulo %></h2>
           <p id="destaque-autor">Escrito por: <i><%= destaque.id_autor.nome %></i></p>
           <p id="destaque-usuario">@<%= destaque.id_autor.usuario %></p>
-          <p id="destaque-resumo"><%= destaque.resumo %></p>
+          <p id="destaque-resumo"><%= destaque.resumo.slice(0, 250) %><% if (destaque.resumo.length > 250) { %>...<% } %></p>
           <p id="destaque-genero"><%= destaque.genero.join('; ') %></p>
         </div>
       </div>
@@ -26,9 +26,10 @@
               <img src="<%= historia.capa_url %>" alt="<%= historia.titulo %>">
             </div>
             <div class="info-card">
-              <h3 id="info-card-titulo"><%= historia.titulo %></h3>
-              <p id="info-card-usuario">@<%= historia.id_autor.usuario %></p>
-              <p id="info-card-status"><%= historia.status %></p>
+              <h3 class="info-card-titulo"><%= historia.titulo %></h3>
+              <p class="info-card-usuario">@<%= historia.id_autor.usuario %></p>
+              <p class="info-card-resumo"><%= historia.resumo.slice(0, 75) %><% if (historia.resumo.length > 75) { %>...<% } %></p>
+              <p class="info-card-status"><%= historia.status %></p>
             </div>
           </div>
         <% }) %>

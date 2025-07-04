@@ -29,8 +29,22 @@
             </div>
             <label for="titulo">Título:</label>
             <input type="text" name="titulo" placeholder="Título da História" required>
-            <label for="genero">Genêro (se mais de um, separar por vírgula):</label>
-            <input type="text" name="genero" placeholder="Ex.: Ação, Aventura, Fantasia" required>
+            <label for="genero">Gêneros:</label>
+            <div class="select-generos">
+                <div id="generos-select" class="generos-select" tabindex="0">
+                    Selecione os gêneros... <span class="icon-select">▼</span>
+                </div>
+                <div id="generos-options" class="generos-options hidden">
+                    <% generos.forEach(genero => { %>
+                        <div class="option">
+                            <label for="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>">
+                                <input type="checkbox" name="genero" value="<%= genero.nome %>" id="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>" required>
+                                <%= genero.nome %>
+                            </label>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
             <label for="resumo">Resumo:</label>
             <textarea name="resumo" placeholder="Resumo da História" required></textarea>
             <label for="capitulos">Capítulos:</label>

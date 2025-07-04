@@ -7,7 +7,8 @@ const autorSchema = new mongoose.Schema({
   usuario: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   senha: { type: String, required: true },
-  tipo_usuario: { type: String, enum: ['autor', 'admin'], default: 'autor' },
+  tipo_usuario: { type: String, enum: ['autor', 'moderador', 'admin'], default: 'autor' },
+  modo_usuario: { type: String, enum: ['autor', 'moderador', 'admin'], default: 'autor' },
   dataNascimento: { type: Date, required: true },
   biografia: { type: String },
   fotoPerfil: { type: String, default: '/images/default-profile.png' },
@@ -18,11 +19,11 @@ const autorSchema = new mongoose.Schema({
     sitePessoal: {type: String, default: ''}
   },
   preferenciasGenero: { type: [String], default: [] },
-  dataCriacao: { type: Date, default: Date.now },
+  data_criacao: { type: Date, default: Date.now },
   historias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Historia' }],
   seguindo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Autor' }],
   seguidores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Autor' }]
-}, { timestamps: true });
+});
 
 // Hash da senha antes de salvar
 autorSchema.pre('save', async function (next) {

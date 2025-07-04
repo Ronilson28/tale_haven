@@ -3,6 +3,7 @@ const router = express.Router();
 const Autor = require('../models/Autor');
 const Historia = require('../models/Historia');
 const Capitulo = require('../models/Capitulo');
+const Genero = require('../models/Genero');
 const upload = require('../middlewares/upload');
 const verificarAutenticacao = require('../middlewares/auth');
 
@@ -40,10 +41,12 @@ router.get('/:id/ler', async (req, res) => {
 });
 
 // GET /historias/nova-historia
-router.get('/nova-historia', verificarAutenticacao, (req, res) => {
+router.get('/nova-historia', verificarAutenticacao, async (req, res) => {
+  const generos = await Genero.find({ ativo: true }).sort('nome');
   res.render('nova_historia', {
     title: 'Criar Nova História',
     mensagemErro: null,
+    generos
   });
 });
 
@@ -52,11 +55,16 @@ router.post('/nova-historia', verificarAutenticacao, upload.single('capa_url'), 
   try {
     const { titulo, genero, resumo, capitulos, capa_selecionada } = req.body;
 
-    // Convertendo string em array
-    const generosArray = (genero || "")
-      .split(',')
-      .map(g => g.trim())
-      .filter(g => g);
+    
+    let generos = [];
+    if (genero) {
+      if (Array.isArray(genero)) {
+        generos = genero.map(str => str.trim()).filter(str => str !== '');
+      } else {
+        const valor = genero.trim();
+        if (valor) generos = [valor];
+      }
+    }
     
     // Escolhe a capa com base no que o usuário usou
     const capaFinal = req.file
@@ -65,7 +73,7 @@ router.post('/nova-historia', verificarAutenticacao, upload.single('capa_url'), 
 
     const novaHistoria = new Historia({
       titulo,
-      genero: generosArray,
+      genero: generos,
       resumo,
       id_autor: req.session.autor.id,
       capa_url: capaFinal
@@ -136,6 +144,7 @@ router.delete('/:id', verificarAutenticacao, async (req, res) => {
 router.get('/editar/:id', verificarAutenticacao, async (req, res) => {
   try {
     const historia = await Historia.findById(req.params.id).populate('capitulos');
+    const generos = await Genero.find({ ativo: true }).sort('nome');
     if (!historia) {
       return res.status(404).render('404', { mensagem: 'História não encontrada' });
     }
@@ -143,7 +152,8 @@ router.get('/editar/:id', verificarAutenticacao, async (req, res) => {
     res.render('editar_historia', {
       title: 'Editar História',
       historia,
-      mensagemErro: null
+      mensagemErro: null,
+      generos
     });
   } catch (err) {
     console.error(err);
@@ -158,7 +168,16 @@ router.get('/editar/:id', verificarAutenticacao, async (req, res) => {
 router.post('/editar/:id', verificarAutenticacao, upload.single('capa_url'), async (req, res) => {
   try {
     const { titulo, genero, resumo, capitulos_removidos, capa_selecionada } = req.body;
-    const generosArray = (genero || "").split(',').map(g => g.trim()).filter(Boolean);
+    
+    let generos = [];
+    if (genero) {
+      if (Array.isArray(genero)) {
+        generos = genero.map(str => str.trim()).filter(str => str !== '');
+      } else {
+        const valor = genero.trim();
+        if (valor) generos = [valor];
+      }
+    }
 
     // Buscar a história atual
     const historiaExistente = await Historia.findById(req.params.id).populate('capitulos');
@@ -210,9 +229,9 @@ router.post('/editar/:id', verificarAutenticacao, upload.single('capa_url'), asy
       ? '/uploads/capas/' + req.file.filename
       : capa_selecionada || historiaExistente.capa_url;
     
-      // Atualiza a história com os novos dados
+    // Atualiza a história com os novos dados
     historiaExistente.titulo = titulo;
-    historiaExistente.genero = generosArray;
+    historiaExistente.genero = generos;
     historiaExistente.resumo = resumo;
     historiaExistente.capitulos = novosIdsCapitulos;
     historiaExistente.atualizado_em = new Date(Date.now());
@@ -232,21 +251,6 @@ router.post('/editar/:id', verificarAutenticacao, upload.single('capa_url'), asy
       mensagemErro: 'Erro ao atualizar a história.',
       historia: req.body
     });
-  }
-});
-
-// Atualizar história (PUT /historias/:id)
-router.put('/:id', async (req, res) => {
-  try {
-    const { titulo, categorias } = req.body;
-    await Historia.findByIdAndUpdate(req.params.id, {
-      titulo,
-      categorias
-    });
-    res.json({ message: 'História atualizada com sucesso!' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Erro ao atualizar história.' });
   }
 });
 

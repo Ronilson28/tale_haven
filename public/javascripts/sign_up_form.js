@@ -1,7 +1,5 @@
 const dropdownSelect = document.getElementById('generos-select');
 const dropdownOptions = document.getElementById('generos-options');
-const inputNovoGenero = document.getElementById('novo-genero');
-const btnAddNovo = document.getElementById('btn-add-novo');
 
 // Função para alternar visibilidade da senha
 function toggleSenha(inputName, iconElement) {
@@ -48,11 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
       erros.push('As senhas não coincidem');
     }
 
-    if (inputNovoGenero.value.trim() /* && !btnAddNovo.classList.contains('added')*/) {
-      e.preventDefault();
-      erros.push('Novo gênero não adicionado! Por favor, adicione-o ou limpe o campo.');
-    }
-
     // Regex para validar o nome de usuário
     const regex = /^(?:[a-z][a-z0-9._]*|_+[a-z][a-z0-9._]*)$/;
     if (!regex.test(usuario)) {
@@ -66,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Seleciona os ícones de senha
+// Abre e fecha o dropdown
 dropdownSelect.addEventListener('click', () => {
   dropdownOptions.classList.toggle('hidden');
 });
@@ -76,47 +69,6 @@ document.addEventListener('click', (e) => {
   if (!dropdownSelect.contains(e.target) && !dropdownOptions.contains(e.target) && e.target !== inputNovoGenero && e.target !== btnAddNovo) {
     dropdownOptions.classList.add('hidden');
   }
-});
-
-// Adiciona novo gênero ao dropdown
-btnAddNovo.addEventListener('click', () => {
-  const novoGenero = inputNovoGenero.value.trim();
-  if (!novoGenero) return alert('Digite um gênero para adicionar.');
-
-  // Verifica se já existe
-  const inputs = dropdownOptions.querySelectorAll('input[type=checkbox]');
-  for (const input of inputs) {
-    if (input.value.toLowerCase() === novoGenero.toLowerCase()) {
-      alert('Esse gênero já existe.');
-      return;
-    }
-  }
-
-  // Cria novo checkbox (novo gênero)
-  const id = 'gen-' + novoGenero.toLowerCase().replace(/\s+/g, '-');
-
-  // Cria elementos para o novo gênero
-  const div = document.createElement('div');
-  div.className = 'option';
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.id = id;
-  checkbox.name = 'preferenciasGenero';
-  checkbox.value = novoGenero;
-  checkbox.checked = true;
-  const label = document.createElement('label');
-  label.htmlFor = id;
-  label.textContent = novoGenero;
-
-  div.appendChild(checkbox);
-  div.appendChild(label);
-
-  dropdownOptions.appendChild(div);
-
-  inputNovoGenero.value = '';
-  dropdownOptions.classList.remove('hidden');
-
-  atualizarTextoSelecionado();
 });
 
 // Atualiza o texto do dropdown com os gêneros selecionados

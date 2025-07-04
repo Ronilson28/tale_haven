@@ -21,7 +21,7 @@ var loginRouter = require('./routes/login');
 var signUpRouter = require('./routes/sign_up');
 var logoutRouter = require('./routes/logout');
 var historiasRouter = require('./routes/historias');
-//var categoriaProfile = require('./routes/categoriaProfile');
+var categorias = require('./routes/categorias');
 var profileRouter = require('./routes/profile');
 var publicProfileRouter = require('./routes/public_profile');
 
@@ -58,7 +58,7 @@ app.use('/sign_up', signUpRouter);
 app.use('/logout', logoutRouter);
 app.use('/profile', profileRouter);
 app.use('/historias', historiasRouter);
-//ape.use('/categorias', categoriaProfile);
+app.use('/categorias', categorias);
 app.use('/', publicProfileRouter);
 
 // Middleware para capturar erros 404 (página não encontrada)

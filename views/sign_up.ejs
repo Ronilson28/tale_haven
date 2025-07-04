@@ -26,24 +26,22 @@
           Selecione os gêneros... <span class="icon-select">▼</span>
         </div>
         <div id="generos-options" class="generos-options hidden">
-          <div class="option" ><input type="checkbox" name="preferenciasGenero" value="Ação" id="gen-acao"><label for="gen-acao">Ação</label></div>
-          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Fantasia" id="gen-fantasia"><label for="gen-fantasia">Fantasia</label></div>
-          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Ficção Científica" id="gen-ficcao"><label for="gen-ficcao">Ficção Científica</label></div>
-          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Mistério" id="gen-misterio"><label for="gen-misterio">Mistério</label></div>
-          <div class="option" ><input type="checkbox" name="preferenciasGenero" value="Romance" id="gen-romance"><label for="gen-romance">Romance</label></div>
-          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Suspense" id="gen-suspense"><label for="gen-suspense">Suspense</label></div>
-          <div class="option"><input type="checkbox" name="preferenciasGenero" value="Terror" id="gen-terror"><label for="gen-terror">Terror</label></div>
-        </div> 
-        <div class="add-novos-generos">
-          <label class="label-cadastro" for="novo-genero">Outro Gênero?</label>
-          <input type="text" id="novo-genero" placeholder="Adicione um novo gênero" />
-          <button type="button" id="btn-add-novo">Adicionar</button>
+          <% generos.forEach(genero => { %>
+            <div class="option">
+              <input
+                type="checkbox" 
+                name="preferenciasGenero" 
+                value="<%= genero.nome %>" 
+                id="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>"                
+              >
+              <label for="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>">
+                <%= genero.nome %>
+              </label>
+            </div>
+          <% }) %>
         </div>
       </div>
       
-      <!--label class="label-cadastro" for="biografia">Bio</label>
-      <textarea name="biografia" placeholder="Escreva sua biografia"></textarea-->
-
       <label class="label-cadastro" for="senha">Senha<span class="campo-obrigatorio">*</span></label>
       <div class="senha-container">
         <input type="password" name="senha" placeholder="mín.: 8 caracteres" required>

@@ -36,15 +36,15 @@
             </ul>
           <% } %>
         </div>
-
-        <p id="data-criacao"><strong>Entrou em:</strong> <%= autor.dataCriacao.toLocaleDateString() %></p>
+        
+        <p id="data-criacao"><strong>Entrou em:</strong> <%= autor.data_criacao.toLocaleDateString() %></p>
         
         <div class="contagem-seguidores">
           <p><strong><%= autor.historias.length %></strong> histórias publicadas</p>
           <p id="listar-seguidores"><strong><a href="#" onclick="abrirModalLista('seguidores')"><%= autor.seguidores.length %></strong> seguidores</a></p>
           <p id="listar-seguidores"><strong><a href="#" onclick="abrirModalLista('seguindo')"><%= autor.seguindo.length %></strong> seguindo</a></p>
         </div>
-
+        
         <div class="acoes-perfil">
           <a href="/profile/editar">
             <button id="btn-editar-perfil" class="btn-editar-perfil">Editar Perfil</button>

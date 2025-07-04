@@ -31,7 +31,7 @@ const historiaSchema = new mongoose.Schema({
   //nota: Number, comentario: String
   //}],
   //slug: String
-}, {timestamps: true});
+});
 
 // Middleware para atualizar o campo atualizado_em antes de salvar
 historiaSchema.pre('save', function (next) {
