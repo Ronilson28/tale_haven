@@ -7,6 +7,14 @@
     <h1 class="leitura-titulo"><%= historia.titulo %></h1>
     <p class="leitura-autor">Por <a class="leitura-autor" href="/<%= historia.id_autor.usuario %>"><%= historia.id_autor.nome || 'Autor Desconhecido' %></a></p>
     <p class="leitura-data">Publicado em <%= new Date(historia.data_criacao).toLocaleDateString() %></p>
+    <% if (session && session.autor && session.autor.id) { %>
+      <form action="/historias/<%= historia._id %>/curtir" method="POST" class="form-curtida">
+        <button type="submit" class="btn-curtir <%= historiaCurtida ? 'curtido' : '' %>">
+          <i class="fa<%= historiaCurtida ? 's' : 'r' %> fa-heart"></i>
+          <span><%= historiaCurtida ? 'Curtido' : 'Curtir' %></span>
+        </button>
+      </form>
+    <% } %>
 
     <hr>
 
@@ -21,13 +29,38 @@
           <div class="capitulo">
             <h2><%= cap.titulo || ('Capítulo ' + (index + 1)) %></h2>
             <p><%- cap.conteudo.replace(/\n/g, '<br>') %></p>
+
+            <!-- Comentários deste capítulo -->
+            <div class="comentarios">
+              <h3>Comentários</h3>
+
+              <form action="/historias/capitulos/<%= cap._id %>/comentarios" method="POST" class="form-comentario">
+                <textarea name="conteudo" placeholder="Deixe seu comentário" required></textarea>
+                <button type="submit">Comentar</button>
+              </form>
+
+              <ul class="lista-comentarios">
+                <% if (cap.comentarios && cap.comentarios.length > 0) { %>
+                  <% cap.comentarios.forEach(com => { %>
+                    <li>
+                      <strong><%= com.autor.nome %>:</strong>
+                      <%= com.conteudo %>
+                      <br><small><%= new Date(com.createdAt).toLocaleString() %></small>
+                    </li>
+                  <% }) %>
+                <% } else { %>
+                  <li><em>Seja o primeiro a comentar!</em></li>
+                <% } %>
+              </ul>
+            </div>
+            <!-- Fim dos comentários -->
           </div>
         <% }) %>
       </div>
     </div>
 
-    <a href="/<%= origem === 'profile' ? 'profile' : origem === 'public_profile' ? usuario : '' %>" class="btn-voltar">
-      Voltar ao <%= origem === 'profile' ? 'Perfil' : origem === 'public_profile' ? 'Perfil' : 'Início' %>
+    <a href="/<%= origem === 'index' ? '' : origem === 'public_profile' ? usuario : origem %>" class="btn-voltar">
+      Voltar <%= origem === 'profile' ? 'ao Perfil' : origem === ' public_profile' ? 'ao Perfil' : origem === 'index' ? 'ao Início' : '' %>
     </a>
     
   </section>

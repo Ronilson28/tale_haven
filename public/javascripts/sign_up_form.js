@@ -52,6 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
       erros.push('Nome de usuário inválido! Exemplos válidos: "username123", "user.name", "user_name", "_username"');
     }
 
+    const nomesReservados = ['login', 'logout', 'profile', 'sign_up', 'admin', 'moderacao', 'categorias', 'historias'];
+    if (nomesReservados.includes(usuario)) {
+      erros.push('Nome de usuário não permitido');
+    }
+
     if (erros.length > 0) {
       e.preventDefault();
       alert(erros.join('\n'));

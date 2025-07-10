@@ -2,12 +2,11 @@ var express = require('express');
 const session = require('express-session');
 const Historia = require('../models/Historia');
 const Genero = require('../models/Genero');
+const Autor = require('../models/Autor');
 var router = express.Router();
 
 // Rota GET para a página inicial
 router.get('/', async (req, res) => {
-  console.log('Autor na sessão atual:', req.session.autor || 'Usuário não autenticado');
-  
   try {
     let destaque = req.session.destaque;
 
@@ -15,16 +14,10 @@ router.get('/', async (req, res) => {
       const total = await Historia.countDocuments();
       const random = Math.floor(Math.random() * total);
       const historiaDestaque = await Historia.findOne().skip(random).populate('id_autor');
-
       if (historiaDestaque) {
         req.session.destaque = historiaDestaque;
         destaque = historiaDestaque;
-        console.log('Novo destaque gerado:', destaque.titulo);
-      } else {
-        console.log('Nenhuma história encontrada para destaque.');
       }
-    } else {
-      console.log('Destaque mantido da sessão:', destaque.titulo);
     }
 
     const usados = await Historia.aggregate([
@@ -34,7 +27,6 @@ router.get('/', async (req, res) => {
     const nomesGenerosUsados = usados.map(g => g._id);
     // Busca apenas os gêneros cadastrados que têm histórias
     const generosComHistorias = await Genero.find({ nome: { $in: nomesGenerosUsados } });
-    console.log('Gêneros cadastrados:', generosComHistorias.map(g => g.nome));
 
     // Para cada gênero, buscar até 10 histórias
     const categoriasComHistorias = await Promise.all(
@@ -44,25 +36,16 @@ router.get('/', async (req, res) => {
       })
     );
 
-    const mensagemErro = req.session.mensagemErro || null;
-    req.session.mensagemErro = null;
-
     res.render('index', {
       title: 'Tale Haven',
-      mensagemErro: mensagemErro,
       destaque,
       categorias: categoriasComHistorias
     });
-    req.session.mensagemErro = null;
 
   } catch (err) {
     console.error('Erro ao carregar página inicial:', err);
-    res.status(500).render('index', {
-      title: 'Tale Haven',
-      mensagemErro: 'Erro ao carregar página inicial.',
-      destaque: null,
-      categorias: []
-    });
+    req.session.mensagemErro = 'Erro ao carregar página inicial.';
+    res.status(500).redirect('/login');
   }
 });
 

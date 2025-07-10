@@ -3,12 +3,13 @@ const router = express.Router();
 const Autor = require('../models/Autor');
 const Historia = require('../models/Historia');
 const Capitulos = require('../models/Capitulo');
+const Interacao = require('../models/Interacao');
 const verificarAutenticacao = require('../middlewares/auth');
 
 // Rota pública para ver o perfil de outro autor
 router.get('/:usuario', async (req, res) => {
   try {
-    const autor = await Autor.findOne({usuario:req.params.usuario}).populate('historias').populate('seguidores').populate('seguindo');
+    const autor = await Autor.findOne({usuario:req.params.usuario.toLowerCase()}).populate('historias').populate('seguidores').populate('seguindo');
     if (!autor) {
         req.session.mensagemErro = 'Autor não encontrado';
         return res.status(404).redirect('/');
@@ -16,6 +17,7 @@ router.get('/:usuario', async (req, res) => {
     
     let autorLogado = null;
     let autorSeguidores = [];
+    let idsHistoriasCurtidasAutorLogado = [];
 
     if (req.session?.autor?.id) {
       autorLogado = await Autor.findById(req.session.autor.id);
@@ -23,18 +25,37 @@ router.get('/:usuario', async (req, res) => {
         return res.redirect('/profile');
       }
       autorSeguidores = autor.seguidores.map(seg => seg._id.toString());
+      // Buscar interações de curtidas feitas pelo autor logado
+      const interacoesCurtidasAutorLogado = await Interacao.find({
+        tipo: 'curtida',
+        autor: req.session.autor.id,
+        tipoReferencia: 'Historia'
+      });
+      // Extrair apenas os IDs das histórias curtidas
+      idsHistoriasCurtidasAutorLogado = interacoesCurtidasAutorLogado.map(interacao => interacao.referencia.toString());
     }
+
+    // Buscar interações de curtidas feitas pelo autor
+    const interacoesCurtidas = await Interacao.find({
+      tipo: 'curtida',
+      autor: autor._id,
+      tipoReferencia: 'Historia'
+    });
+    
+    // Extrair apenas os IDs das histórias curtidas
+    const idsHistoriasCurtidas = interacoesCurtidas.map(interacao => interacao.referencia.toString());
+    
+    // Agora buscar as histórias usando esses IDs
+    const historiasCurtidas = await Historia.find({ _id: { $in: idsHistoriasCurtidas } });
 
     res.render('public_profile', {
       title: autor.nome +  ' - Tale Haven',
       autor,
       autorLogado,
       autorSeguidores,
-      mensagemErro: req.session.mensagemErro || null
+      idsHistoriasCurtidasAutorLogado,
+      historiasCurtidas
     });
-
-    // Limpa as mensagens de erro após exibir
-    req.session.mensagemErro = null;
 
   } catch (err) {
     console.error(err);
@@ -73,7 +94,7 @@ router.post('/:id/seguir', verificarAutenticacao, async (req, res) => {
       autorAtual.seguindo.push(autorAlvo._id);
       autorAlvo.seguidores.push(autorAtual._id);
     }
-
+    
     await autorAtual.save();
     await autorAlvo.save();
 
@@ -81,7 +102,7 @@ router.post('/:id/seguir', verificarAutenticacao, async (req, res) => {
   } catch (err) {
     console.error(err);
     req.session.mensagemErro = 'Erro ao seguir/remover o autor';
-    res.status(500).redirect('/');
+    res.status(500).redirect('back');
   }
 });
 

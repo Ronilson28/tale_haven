@@ -4,19 +4,23 @@
       <a href="/"><img src="/images/logo_tale_haven.jpg" alt="Portal de Histórias"></a>
       <!--a href="/">Portal de Histórias</a-->
     </div>
-    
-    <nav class="site-nav">
-      <a href="/">Início</a>
-      <a href="/categorias">Categorias</a>
+    <div id="menu-icon" class="menu-icon" onclick="toggleMenu()" hidden>☰</div>
+    <div class="menu-contain">
+      <nav id="menu" class="site-nav">
+        <a href="/">Início</a>
+        <a href="/categorias">Categorias</a>
 
-      <% if (session && session.autor && session.autor.nome) { %>
-        <a href="/profile"><%= session.autor.nome %></a>
-        <a href="/logout">Sair</a>
-      <% } else { %>
-        <a href="/login">Entrar</a>
-        <a href="/sign_up">Cadastrar</a>
-      <% } %>
-    </nav>
-
+        <% if (session && session.autor && session.autor.nome) { %>
+          <a href="/profile"><%= session.autor.nome.split(' ')[0] %></a>
+          <a href="/configuracao">Configurações</a>
+          <a href="/logout">Sair</a>
+        <% } else { %>
+          <a href="/login">Entrar</a>
+          <a href="/sign_up">Cadastrar</a>
+        <% } %>
+      </nav>
+    </div>
   </div>
 </header>
+
+<script src="/javascripts/header.js"></script>

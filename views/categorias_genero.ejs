@@ -8,11 +8,11 @@
       <div class="lista-historias">
         <% historias.forEach(historia => { %>
           <div class="card-historias-gen">
-            <div class="card-img">
-              <img src="<%= historia.capa_url %>" alt="Capa da história">
+            <div class="card-img" data-id="<%= historia._id %>" data-genero="<%= genero %>">
+              <img style="cursor: pointer;" src="<%= historia.capa_url %>" alt="Capa da história">
             </div>
             <div class="info-card-gen">
-              <h2 class="info-card-titulo"><a href="/historias/<%= historia._id %>/ler"><%= historia.titulo %></a></h2>
+              <h2 class="info-card-titulo"><a href="/historias/<%= historia._id %>/ler?from=categorias/<%= genero.toLowerCase().replace(/\s+/g, '-') %>&title=<%= title %>&user=null"><%= historia.titulo %></a></h2>
               <p class="info-card-autor">Por <a href="/<%= historia.id_autor.usuario %>"><%= historia.id_autor.nome %></a></p>
               <p class="info-card-usuario"><a href="/<%= historia.id_autor.usuario %>">@<%= historia.id_autor.usuario %></a></p>
               <p class="info-card-resumo"><%= historia.resumo.slice(0, 100) %><% if (historia.resumo.length > 100) { %>...<% } %></p>
@@ -26,3 +26,5 @@
     <a href="/categorias" class="btn-voltar">← Voltar para Categorias</a>
   </section>
 </main>
+
+<script src="/javascripts/categorias.js"></script>

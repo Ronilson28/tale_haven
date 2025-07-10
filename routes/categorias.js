@@ -7,20 +7,14 @@ router.get('/', async (req, res) => {
   try {
     const generos = await Genero.find().sort({ nome: 1 });
 
-    const mensagemErro = req.session.mensagemErro || null;
-    req.session.mensagemErro = null;
-
-    res.render('categorias',
-    {
+    res.render('categorias', {
       title: 'Categorias - Tale Haven',
-      generos,
-      mensagemErro: mensagemErro
+      generos
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).render('/',
-    {
+    res.status(500).render('/', {
       title: 'Tale Haven',
       mensagemErro: 'Erro ao carregar categorias'
     });
@@ -44,13 +38,13 @@ router.get('/:nome', async (req, res) => {
     res.render('categorias_genero', {
       title: `${genero.nome} - Tale Haven`,
       genero: genero.nome,
-      historias,
-      mensagemErro: null
+      historias
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).render('500', { mensagem: 'Erro ao carregar histórias do gênero' });
+    req.session.mensagemErro = 'Erro ao carregar as histórias do gênero' + req.params.nome.replace(/-/g, ' ');
+    return res.status(500).redirect('/categorias');
   }
 });
 

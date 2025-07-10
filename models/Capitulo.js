@@ -8,7 +8,7 @@ const capituloSchema = new mongoose.Schema({
   id_historia: { type: mongoose.Schema.Types.ObjectId, ref: 'Historia', required: true },
   data_criacao: { type: Date, default: Date.now },
   atualizado_em: { type: Date, default: Date.now },
-  //comentarios: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comentario' }],
+  comentarios: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comentario' }],
 });
 
 // Middleware para atualizar o campo atualizado_em antes de salvar

@@ -7,7 +7,7 @@
       </div>
       <div class="info-perfil">
         <h2 id="nome-autor"><%= autor.nome %></h2>
-        <p id="usuario">@<%= autor.usuario %></p>
+        <p id="usuario-autor">@<%= autor.usuario %></p>
 
         <div class="biografia-container">
           <% if (autor.biografia) { %>
@@ -53,6 +53,39 @@
       </div>
     </section>
 
+    <section class="historias-curtidas">
+      <h2>Histórias Curtidas</h2>
+      <ul class="lista-historias">
+      <% if (historiasCurtidas.length > 0) { %>
+        <% historiasCurtidas.forEach(function(historia) { %>
+          <li class="historia-item">
+            <div class="historia-container">
+              <form action="/historias/<%= historia._id %>/curtir" method="POST" class="form-descurtir">
+                <button type="submit" class="btn-descurtir <%= historia ? 'curtido' : '' %>" title="Remover de Histórias Curtidas">
+                  <i class="fas fa-heart"></i>
+                </button>
+              </form>
+              <img src="<%= historia.capa_url %>" alt="Capa da História" class="imagem-capa" />
+              <div class="historia-info">
+                <h3><%= historia.titulo %></h3>
+                <p id="genero-publico"><%= historia.genero.join('; ') %></p>
+                <p><strong>Publicação em: </strong> <%= new Date(historia.data_criacao).toLocaleDateString() %></p>
+                <p id="resumo-publico"><%= historia.resumo %></p>
+                <p><%= historia.status %></p>
+                <p><strong>Última Atualização:</strong> <%= new Date(historia.atualizado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'medium' }) %></p>
+              </div>
+              <div class="acoes-historia">
+                <a class="btn-ler-historia" href="/historias/<%= historia._id %>/ler?from=profile&title=<%= autor.nome %> - Tale Haven>&user=<%= autor.usuario %>">Ler</a>
+              </div>
+            </div>
+          </li>
+        <% }) %>
+      <% } else { %>
+        <li class="sem-historias"><em>Você ainda não curtiu nenhuma história.</em></li>
+      <% } %>
+      </ul>
+    </section>
+
     <section class="historias-publicadas">
       <div class="nova-historia">
         <h2>Minhas Histórias</h2>
@@ -63,6 +96,13 @@
         <% autor.historias.forEach(function(historia) { %>
             <li class="historia-item">
               <div class="historia-container">
+                <form action="/historias/<%= historia._id %>/curtir" method="POST" class="form-curtir-p"
+                  title="<%= idsHistoriasCurtidas.includes(historia._id.toString()) ? 'Remover de Histórias Curtidas' : 'Adicionar em Histórias Curtidas' %>"
+                >
+                  <button type="submit" class="btn-curtir-p <%= idsHistoriasCurtidas.includes(historia._id.toString()) ? 'curtido' : '' %>">
+                    <i class="fa<%= idsHistoriasCurtidas.includes(historia._id.toString()) ? 's' : 'r' %> fa-heart"></i>
+                  </button>
+                </form>
                 <img src="<%= historia.capa_url %>" alt="Capa da História" class="imagem-capa" />
                 <div class="historia-info">
                   <h3><%= historia.titulo %></h3>
@@ -79,7 +119,7 @@
                 </div>
               </div>
             </li>
-        <% }); %>
+        <% }) %>
       <% } else { %>
         <li class="sem-historias"><em>Você ainda não publicou nenhuma história.</em></li>
       <% } %>

@@ -4,7 +4,10 @@ const Autor = require('../models/Autor');
 const Historia = require('../models/Historia');
 const Capitulo = require('../models/Capitulo');
 const Genero = require('../models/Genero');
+const Comentario = require('../models/Comentario');
+const Interacao = require('../models/Interacao');
 const upload = require('../middlewares/upload');
+const mongoose = require('mongoose');
 const verificarAutenticacao = require('../middlewares/auth');
 
 // Visualização da História
@@ -14,13 +17,33 @@ router.get('/:id/ler', async (req, res) => {
   const usuario = req.query.user;
   
   try {
-    const historia = await Historia.findById(req.params.id).populate('id_autor').populate('capitulos');
+    const capitulo = await Capitulo.findById(req.params.id).populate({ path: 'comentarios', populate: { path: 'autor', select: 'nome' } });
+
+    const historia = await Historia.findById(req.params.id).populate({
+    path: 'capitulos',
+    populate: {
+      path: 'comentarios',
+      populate: { path: 'autor', select: 'nome' }
+    }
+  }).populate('id_autor');
     if (!historia) {
       return res.status(404).render(origem, {
         title: titulo,
         usuario,
         mensagemErro: 'História não encontrada.'
       });
+    }
+    
+    let historiaCurtida = false;
+
+    if (req.session?.autor?.id) {
+      const interacao = await Interacao.findOne({
+        tipo: 'curtida',
+        autor: req.session.autor.id,
+        referencia: historia._id,
+        tipoReferencia: 'Historia'
+      });
+      historiaCurtida = !!interacao;
     }
 
     res.render('ler_historia',{
@@ -29,7 +52,8 @@ router.get('/:id/ler', async (req, res) => {
       origem,
       titulo,
       usuario,
-      mensagemErro: null
+      capitulo,
+      historiaCurtida
     });
   } catch (err) {
     console.error(err);
@@ -45,7 +69,6 @@ router.get('/nova-historia', verificarAutenticacao, async (req, res) => {
   const generos = await Genero.find({ ativo: true }).sort('nome');
   res.render('nova_historia', {
     title: 'Criar Nova História',
-    mensagemErro: null,
     generos
   });
 });
@@ -152,7 +175,6 @@ router.get('/editar/:id', verificarAutenticacao, async (req, res) => {
     res.render('editar_historia', {
       title: 'Editar História',
       historia,
-      mensagemErro: null,
       generos
     });
   } catch (err) {
@@ -251,6 +273,72 @@ router.post('/editar/:id', verificarAutenticacao, upload.single('capa_url'), asy
       mensagemErro: 'Erro ao atualizar a história.',
       historia: req.body
     });
+  }
+});
+
+// POST /historias/capitulos/:id/comentarios
+router.post('/capitulos/:id/comentarios', verificarAutenticacao, async (req, res) => {
+  try {
+    const novoComentario = new Comentario({
+      conteudo: req.body.conteudo,
+      autor: req.session.autor.id,
+      capitulo: req.params.id
+    });
+
+    const comentarioSalvo = await novoComentario.save();
+
+    // Adicionar ao capítulo
+    await Capitulo.findByIdAndUpdate(req.params.id, {
+      $push: { comentarios: comentarioSalvo._id }
+    });
+
+    res.redirect(`back`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao salvar comentário.');
+  }
+});
+
+router.post('/:id/curtir', verificarAutenticacao, async (req, res) => {
+  try {
+    const historiaId = req.params.id;
+    const autorId = req.session.autor.id;
+
+    if (!mongoose.Types.ObjectId.isValid(historiaId)) {
+      req.session.mensagemErro = 'ID de história inválido.';
+      return res.redirect('back');
+    }
+
+    const historia = await Historia.findById(historiaId);
+    if (!historia) {
+      req.session.mensagemErro = 'História não encontrada.';
+      return res.redirect('back');
+    }
+
+    const interacaoExistente = await Interacao.findOne({
+      tipo: 'curtida',
+      autor: autorId,
+      referencia: historia._id,
+      tipoReferencia: 'Historia'
+    });
+
+    if (interacaoExistente) {
+      await Interacao.deleteOne({ _id: interacaoExistente._id });
+    } else {
+      const novaInteracao = new Interacao({
+        tipo: 'curtida',
+        autor: autorId,
+        referencia: historia._id,
+        tipoReferencia: 'Historia'
+      });
+      await novaInteracao.save();
+    }
+
+    res.redirect(`back`);
+  } catch (error) {
+    console.error('Erro ao curtir/descurtir:', error);
+    req.session.mensagemErro = 'Erro ao curtir/descurtir a história.';
+    res.status(500).redirect('back');
   }
 });
 

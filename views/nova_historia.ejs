@@ -38,7 +38,7 @@
                     <% generos.forEach(genero => { %>
                         <div class="option">
                             <label for="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>">
-                                <input type="checkbox" name="genero" value="<%= genero.nome %>" id="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>" required>
+                                <input type="checkbox" name="genero" value="<%= genero.nome %>" id="gen-<%= genero.nome.toLowerCase().replace(/\s+/g, '-') %>">
                                 <%= genero.nome %>
                             </label>
                         </div>

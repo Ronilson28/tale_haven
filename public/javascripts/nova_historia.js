@@ -80,20 +80,29 @@ document.addEventListener('mouseout', function (e) {
 });
 
 // Evento para publicar a nova história
-document.querySelector('.btn-nova-historia').addEventListener('submit', (e) => {
-    const titulo = document.querySelector('input[name="titulo"]').value.trim();
-    const genero = document.querySelector('input[name="genero"]').value.trim();
-    const resumo = document.querySelector('textarea[name="resumo"]').value.trim();
-    const capitulos = Array.from(document.querySelectorAll('#capitulos-container .capitulo')).map(cap => ({
-        titulo: cap.querySelector('input').value.trim(),
-        conteudo: cap.querySelector('textarea').value.trim()
-    }));
+document.getElementById('novaHistoriaForm').addEventListener('submit', function (e) {
+  const titulo = document.querySelector('input[name="titulo"]').value.trim();
+  const resumo = document.querySelector('textarea[name="resumo"]').value.trim();
+  const capitulos = Array.from(document.querySelectorAll('#capitulos-container .capitulo')).map(cap => ({
+    titulo: cap.querySelector('input[type="text"]').value.trim(),
+    conteudo: cap.querySelector('textarea').value.trim()
+  }));
 
-    if (!titulo || !genero || !resumo || capitulos.some(cap => !cap.titulo || !cap.conteudo)) {
-        e.preventDefault();
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
+  const generosSelecionados = Array.from(document.querySelectorAll('input[name="genero"]:checked'));
+
+  // VALIDAÇÃO
+  if (!titulo || !resumo || capitulos.some(cap => !cap.titulo || !cap.conteudo)) {
+    alert('Por favor, preencha todos os campos obrigatórios.');
+    e.preventDefault();
+    return;
+  }
+
+  if (generosSelecionados.length === 0) {
+    alert('Por favor, selecione pelo menos um gênero.');
+    e.preventDefault();
+    return;
+  }
+  // Se tudo estiver ok, o formulário é enviado normalmente
 });
 
 // Cancelar a criação da nova história

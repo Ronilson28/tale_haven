@@ -48,25 +48,63 @@
 ## 🗂️ Estrutura do Projeto
 
 tale_haven/
-│
 ├── bin/
-│ └── www
+│   └── www
 ├── config/
+│   ├── database.js
+│   └── session.js
 ├── middlewares/
+│   │   ├── auth.js
+│   │   ├── catch_not_found_page.js
+│   │   ├── error_handling.js
+│   │   ├── put_mensagemErro.js
+│   │   ├── session_to_views.js
+│   │   ├── show_header.js
+│   │   └── upload.js
 ├── models/
-│ ├── Autor.js
-│ ├── Historia.js
-│ └── Capitulo.js
+│   │   ├── Autor.js
+│   │   ├── Capitulo.js
+│   │   ├── Comentario.js
+│   │   ├── Genero.js
+│   │   ├── Historia.js
+│   │   └── Interacao.js
 ├── public/
-│ ├── icons/
-│ ├── images/
-│   └── modelos-capas/
-│ ├── javascripts/
-│ ├── icons/
-│ └── uploads/
-│   ├── capas/
-│   └── perfil/
+│   ├── icons/
+│   ├── images/
+│   │   └── modelos-capas/
+│   ├── javascripts/
+│   ├── stylesheets/
+│   └── uploads/
+│   │   ├── capas/
+│   │   └── perfil/
 ├── routes/
+│   ├── categorias.js
+│   ├── historias.js
+│   ├── index.js
+│   ├── login.js
+│   ├── logout.js
+│   ├── profile.js
+│   ├── public_profile.js
+│   └── sign_up.js
+├── scripts/
+│   └── popularGeneros.js
+├── views/
+│   ├── partials/
+│   │   ├── footer.ejs
+│   │   └── header.ejs
+│   ├── categorias_genero.ejs
+│   ├── categorias.ejs
+│   ├── edit_profile.ejs
+│   ├── editar_historia.ejs
+│   ├── error.ejs
+│   ├── index.ejs
+│   ├── layout.ejs
+│   ├── ler_historia.ejs
+│   ├── login.ejs
+│   ├── nova_historia.ejs
+│   ├── profile.ejs
+│   ├── public_profile.js
+│   └── sign_up.ejs
 ├── views/
 │ ├── partials/
 ├── app.js
@@ -77,14 +115,9 @@ tale_haven/
 
 ## 🔮 Funcionalidades Futuras (Roadmap)
 
-- ✅ Sistema de curtidas ou favoritos
-- ✅ Comentários nos capítulos
 - ✅ Página "Explorar" com filtros por gênero e popularidade
-- ✅ Painel do autor com estatísticas
 - ✅ Sistema de notificações
-- ✅ Tradução multilíngue de histórias
 - ✅ Moderação e painel administrativo
-- ✅ Alternância entre tema claro/escuro
 
 ---
 

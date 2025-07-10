@@ -5,15 +5,12 @@ const Autor = require('../models/Autor');
 // Rota GET para exibir o formulário de login
 router.get('/', (req, res) => {
   res.render('login', {
-    title: 'Login - Tale Haven',
-    mensagemErro: null
+    title: 'Login - Tale Haven'
   });
 });
 
 // Rota POST para processar o login
 router.post('/', async (req, res) => {
-  console.log('REQ.BODY:', req.body);
-
   const { email, senha } = req.body;
 
   try {
@@ -25,11 +22,7 @@ router.post('/', async (req, res) => {
         mensagemErro: 'E-mail não cadastrado'
       });
     }
-    // Log para depuração do e-mail
-    console.log('E-mail digitado:', req.body.email);
-    // Log para depuração da senha
-    console.log('Senha digitada:', req.body.senha);
-
+    
     // Verifica se a senha está correta
     if (!senha) {
       return res.render('login', {

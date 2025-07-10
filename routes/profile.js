@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Autor = require('../models/Autor');
 const Historia = require('../models/Historia');
+const Interacao = require('../models/Interacao');
 const upload = require('../middlewares/upload');
 const verificarAutenticacao = require('../middlewares/auth');
 
@@ -10,22 +11,33 @@ router.get('/', verificarAutenticacao, async (req, res) => {
   try {
     const autor = await Autor.findById(req.session.autor.id).populate('historias').populate('seguidores').populate('seguindo');
     if (!autor) {
-      return res.status(404).render('index', {
-        title: 'Tale Haven',
-        mensagemErro: "Autor não encontrado."
-      });
+      req.session.mensagemErro = "Autor não encontrado."
+      return res.status(404).redirect('/');
     }
+
+    // Buscar interações de curtidas feitas pelo autor logado
+    const interacoesCurtidas = await Interacao.find({
+      tipo: 'curtida',
+      autor: req.session.autor.id,
+      tipoReferencia: 'Historia'
+    });
+
+    // Extrair apenas os IDs das histórias curtidas
+    const idsHistoriasCurtidas = interacoesCurtidas.map(interacao => interacao.referencia.toString());
+
+    // Agora buscar as histórias usando esses IDs
+    const historiasCurtidas = await Historia.find({ _id: { $in: idsHistoriasCurtidas } });
+
     res.render('profile', {
       title: autor.nome + ' - Tale Haven',
       autor,
-      mensagemErro: null
+      idsHistoriasCurtidas,
+      historiasCurtidas
     });
   } catch (err) {
     console.error(err);
-    res.status(500).render('index',{
-      title: 'Tale Haven',
-      mensagemErro: 'Erro ao carregar o perfil.'
-    });
+    req.session.mensagemErro = 'Erro ao carregar o perfil.';
+    res.status(500).render('/');
   }
 });
 
@@ -38,8 +50,7 @@ router.get('/editar', verificarAutenticacao, async (req, res) => {
     }
     res.render('edit_profile', { 
       title: 'Editar Perfil - ' + autor.nome, 
-      autor, 
-      mensagemErro: null 
+      autor
     });
   } catch (err) {
     console.error(err);

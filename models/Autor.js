@@ -7,7 +7,7 @@ const autorSchema = new mongoose.Schema({
   usuario: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   senha: { type: String, required: true },
-  tipo_usuario: { type: String, enum: ['autor', 'moderador', 'admin'], default: 'autor' },
+  tipo_usuario: { type: [String], enum: ['autor', 'moderador', 'admin'], default: ['autor'] },
   modo_usuario: { type: String, enum: ['autor', 'moderador', 'admin'], default: 'autor' },
   dataNascimento: { type: Date, required: true },
   biografia: { type: String },
