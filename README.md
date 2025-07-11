@@ -6,7 +6,7 @@
 
 ---
 
-## 🚀 Funcionalidades
+##  Funcionalidades
 
 ### 👤 Autores
 - Cadastro, login e logout
@@ -45,7 +45,7 @@
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## Estrutura do Projeto
 ```bash
 tale_haven/
 ├── bin/
@@ -114,15 +114,7 @@ tale_haven/
 
 ---
 
-## 🔮 Funcionalidades Futuras (Roadmap)
-
-- ✅ Página "Explorar" com filtros por gênero e popularidade
-- ✅ Sistema de notificações
-- ✅ Moderação e painel administrativo
-
----
-
-## 🧪 Como Rodar Localmente
+## Como Rodar Localmente
 
 ```bash
 # Clone o repositório
