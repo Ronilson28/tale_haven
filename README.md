@@ -46,7 +46,7 @@
 ---
 
 ## 🗂️ Estrutura do Projeto
-
+```bash
 tale_haven/
 ├── bin/
 │   └── www
@@ -110,6 +110,7 @@ tale_haven/
 ├── app.js
 ├── package-lock.json
 └── package.json
+```
 
 ---
 
